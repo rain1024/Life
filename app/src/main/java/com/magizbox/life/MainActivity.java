@@ -1,7 +1,7 @@
 package com.magizbox.life;
 
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.graphics.Paint;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -18,6 +18,16 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
+
+import org.apache.log4j.Logger;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     /**
@@ -29,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,18 +60,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,6 +94,8 @@ public class MainActivity extends AppCompatActivity {
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        public List<Action> actions;
+
         public PlaceholderFragment() {
         }
 
@@ -110,13 +111,44 @@ public class MainActivity extends AppCompatActivity {
             return fragment;
         }
 
+        OrmDbHelper mOrmDbHelper;
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            int index = getArguments().getInt(ARG_SECTION_NUMBER);
+
+            mOrmDbHelper = getHelper();
+            try {
+                Dao<Action, Integer> actionDao = mOrmDbHelper.getActionDao();
+                actions = actionDao.queryForAll();
+                System.out.println(actions.size());
+
+                String badAction = actions.get(index - 1).bad;
+                TextView badActionTextView = (TextView) rootView.findViewById(R.id.bad_action_label);
+                badActionTextView.setText(badAction);
+                badActionTextView.setPaintFlags(badActionTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+                String goodAction = actions.get(index - 1).good;
+                TextView goodActionTextView = (TextView) rootView.findViewById(R.id.good_action_label);
+                goodActionTextView.setText(goodAction);
+
+            } catch (SQLException e) {
+                Logger log = Logger.getLogger(PlaceholderFragment.class.getName());
+                log.error("Cannot get data");
+                e.printStackTrace();
+            }
+
             return rootView;
+        }
+
+        private OrmDbHelper getHelper() {
+            if (mOrmDbHelper == null) {
+                mOrmDbHelper = new OrmDbHelper(getActivity());
+            }
+            return mOrmDbHelper;
         }
     }
 
@@ -139,21 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
-            return null;
+            return 10;
         }
     }
 }

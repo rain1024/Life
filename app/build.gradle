@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.magizbox.life"
+        applicationId "com.magizbox.myapplication"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
@@ -24,4 +24,12 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
+    compile 'com.android.support:support-v4:23.2.1'
+
+    compile 'com.j256.ormlite:ormlite-core:4.47'
+    compile 'com.j256.ormlite:ormlite-android:4.47'
+
+    compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
+
+    compile 'log4j:log4j:1.2.17'
 }
