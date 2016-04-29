@@ -2,42 +2,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    android:weightSum="10"
     tools:context="com.magizbox.myapplication.MainActivity$PlaceholderFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        android:background="@drawable/b2"
+        android:tileMode="disabled" android:gravity="top"
+        android:orientation="vertical">
+        <TextView
+            style="@style/TitleTextStyle"
+            android:id="@+id/good_action_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            />
+    </LinearLayout>
 
-    <TextView
-        style="@style/ContentTextStyle"
-        android:id="@+id/bad_label"
-        android:textAlignment="center"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="STOP"/>
-    <TextView
-        style="@style/TitleTextStyle"
-        android:id="@+id/bad_action_label"
-        android:textAlignment="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="@drawable/b1"
+        android:orientation="vertical">
+        <TextView
+            style="@style/TitleTextStyle"
+            android:id="@+id/bad_action_label"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        style="@style/ContentTextStyle"
-        android:id="@+id/good_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:textAlignment="center"
-        android:text="START"
-        android:paddingTop="100dp" />
-    <TextView
-        style="@style/TitleTextStyle"
-        android:id="@+id/good_action_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        />
-
+    </LinearLayout>
 </LinearLayout>
