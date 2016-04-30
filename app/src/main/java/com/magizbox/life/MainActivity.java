@@ -1,5 +1,7 @@
 package com.magizbox.life;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Paint;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
@@ -134,6 +137,18 @@ public class MainActivity extends AppCompatActivity {
                 String goodAction = actions.get(index - 1).good;
                 TextView goodActionTextView = (TextView) rootView.findViewById(R.id.good_action_label);
                 goodActionTextView.setText(goodAction);
+
+                // set backgrounds
+                Context context = this.getContext();
+                Resources resources = context.getResources();
+
+                final int goodResourceId = resources.getIdentifier("g" + index, "drawable", context.getPackageName());
+                LinearLayout goodLayout = (LinearLayout) rootView.findViewById(R.id.good_layout);
+                goodLayout.setBackground(resources.getDrawable(goodResourceId));
+
+                final int badResourceId = resources.getIdentifier("b" + index, "drawable", context.getPackageName());
+                LinearLayout badLayout = (LinearLayout) rootView.findViewById(R.id.bad_layout);
+                badLayout.setBackground(resources.getDrawable(badResourceId));
 
             } catch (SQLException e) {
                 Logger log = Logger.getLogger(PlaceholderFragment.class.getName());
