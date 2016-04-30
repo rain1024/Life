@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="10"
+    android:weightSum="100"
     tools:context="com.magizbox.myapplication.MainActivity$PlaceholderFragment">
     <LinearLayout
         android:layout_width="match_parent"
+        android:id="@+id/good_layout"
         android:layout_height="0dp"
-        android:layout_weight="6"
-        android:background="@drawable/b2"
+        android:layout_weight="55"
         android:tileMode="disabled" android:gravity="top"
         android:orientation="vertical">
         <TextView
@@ -24,15 +24,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
-        android:background="@drawable/b1"
+        android:id="@+id/bad_layout"
+        android:layout_weight="45"
         android:orientation="vertical">
         <TextView
             style="@style/TitleTextStyle"
             android:id="@+id/bad_action_label"
             android:textAlignment="center"
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </LinearLayout>
