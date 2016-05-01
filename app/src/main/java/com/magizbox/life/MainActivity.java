@@ -3,6 +3,8 @@ package com.magizbox.life;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Paint;
+import android.net.Uri;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,15 +24,23 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareDialog;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 
-import org.apache.log4j.Logger;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,6 +74,38 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        // Post to facebook
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
+        final ShareDialog shareDialog = new ShareDialog(this);
+        CallbackManager callbackManager = CallbackManager.Factory.create();
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (shareDialog.canShow(ShareLinkContent.class)) {
+                    ShareLinkContent content = new ShareLinkContent.Builder()
+                            .setQuote("Connect on a global scale.")
+                            .build();
+                    shareDialog.show(content);
+                }
+            }
+        });
     }
 
     @Override
@@ -151,8 +194,7 @@ public class MainActivity extends AppCompatActivity {
                 badLayout.setBackground(resources.getDrawable(badResourceId));
 
             } catch (SQLException e) {
-                Logger log = Logger.getLogger(PlaceholderFragment.class.getName());
-                log.error("Cannot get data");
+                Log.e("SQLException", "error");
                 e.printStackTrace();
             }
 
