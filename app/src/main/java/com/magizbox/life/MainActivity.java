@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 12;
+            return 13;
         }
     }
 }
