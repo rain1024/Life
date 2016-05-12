@@ -132,7 +132,7 @@
             android:layout_alignStart="@+id/textView5" />
     </RelativeLayout>
 
-    <include layout="@layout/content_main4" />
+    <include layout="@layout/content_today" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
