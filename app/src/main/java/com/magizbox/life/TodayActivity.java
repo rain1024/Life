@@ -10,7 +10,7 @@ public class TodayActivity extends AppCompatActivity {
 
     public void switchMain() {
         try {
-            Intent move = new Intent(this, MainActivity.class);
+            Intent move = new Intent(this, ActionActivity.class);
             startActivity(move);
         } catch(Exception e){}
     }
