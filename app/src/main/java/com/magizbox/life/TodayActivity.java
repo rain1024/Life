@@ -8,7 +8,36 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.j256.ormlite.dao.Dao;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class TodayActivity extends AppCompatActivity {
+
+    private List<String> facts;
+    OrmDbHelper mOrmDbHelper;
+    private OrmDbHelper getHelper() {
+        if (mOrmDbHelper == null) {
+            mOrmDbHelper = new OrmDbHelper(this);
+        }
+        return mOrmDbHelper;
+    }
+
+    private void getFacts() {
+        facts = new ArrayList<String>();
+        mOrmDbHelper = getHelper();
+        try {
+            Dao<Action, Integer> actionDao = mOrmDbHelper.getActionDao();
+            List<Action> actions = actionDao.queryBuilder().limit(5).orderByRaw("RANDOM()").query();
+            for(Action action: actions){
+                facts.add(action.good);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void switchMain() {
         try {
@@ -30,7 +59,7 @@ public class TodayActivity extends AppCompatActivity {
             }
         });
 
-        String[] facts = {"LISTENING", "ACTING", "INSPIRING", "HOPING", "BELIEVING"};
+        getFacts();
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.fact_item, facts);
         ListView list = (ListView) findViewById(R.id.factListView);
         list.setAdapter(adapter);
